@@ -40,7 +40,7 @@ to deathorlife
      ]
     if (funmode = "on")
     [
-      every funmodeinterval[setup]
+      every 1[setup]
     ]
   ]
   [
@@ -92,6 +92,21 @@ GRAPHICS-WINDOW
 1
 ticks
 30.0
+
+SLIDER
+0
+0
+0
+0
+NIL
+NIL
+0
+100
+50.0
+1
+1
+NIL
+HORIZONTAL
 
 BUTTON
 10
@@ -178,21 +193,6 @@ funmode
 funmode
 "on" "off"
 0
-
-SLIDER
-895
-265
-1067
-298
-funmodeinterval
-funmodeinterval
-0
-5
-0.5
-.1
-1
-NIL
-HORIZONTAL
 
 @#$#@#$#@
 ## WHAT IS IT?
