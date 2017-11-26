@@ -1,4 +1,5 @@
 patches-own[ali? alineigh]
+globals[xstor xindstor ystor yindstor xmem1 ymem1 xmem2 ymem2 xmem3 ymem3]
 
 to setup
   ca
@@ -27,6 +28,7 @@ to death
 end
 
 to deathorlife
+  every .1 [
   ifelse (conorrug = "con")
   [
     ask patches[
@@ -35,13 +37,16 @@ to deathorlife
      [ifelse alineigh = 3
       [born]
       [ if alineigh != 2
-          [ death]
+          [death]
+
       ]
      ]
-    if (funmode = "on")
+
+     if (funmode = "on")
     [
-      every funmodeinterval[setup]
-    ]
+      every funmodeinterval[
+       ask patches[ifelse(random-float 100 < percent-alive)[born][death]]
+      ]]
   ]
   [
     ask patches[
@@ -49,11 +54,11 @@ to deathorlife
     ask patches
      [ifelse (alineigh > 1 and alineigh < 5)
       [born]
-      [ if alineigh = 0
+      [ if alineigh > 0
             [ death]
       ]
      ]
-  ]
+  ]]
 end
 
 to paint
@@ -61,16 +66,66 @@ to paint
   [
     ask patch mouse-xcor mouse-ycor
     [
-      born ; modular design
+
+        born
+
     ]
   ]
 end
+
+
+
+
+
+
+
+to drawtocordlist [xmem ymem] ; not actually used, this is the template for the save buttons
+  set xstor []
+  set ystor []
+  ask patches with[ali? = true][(set xstor (insert-item 0 xstor pxcor)) (set ystor (insert-item 0 ystor pycor))] ; set paint to draw to store mode and run this to get lists of the x and the y cors for whatever you drew
+  set xmem xstor
+  set ymem ystor
+end
+
+
+
+to drawfrommem [xmem ymem] ; again, a template
+  let xind length(xmem) - 1
+  let yind length(ymem) - 1
+  repeat length(xmem1)[
+    (ask patch (item xind xmem) (item yind ymem)[born])
+    set xind xind - 1
+    set yind yind - 1
+  ]
+end
+
+
+
+
+
+
+
+
+to gospergun ; not yet working :(
+  resize-world -19 19 -11 11
+  ask patches[death]
+  set xstor [-18 -17 2 -7 3 3 -3 -6 17 -8 1 -4 17 -9 -2 1 18 5 -18 2 -6 -7 -4 -5 -3 -17 -3 1 -8 5 2 -9 18 5 -9 5]
+  set ystor [5 4 6 1 4 8 5 1 7 6 6 2 8 5 4 5 8 9 4 5 7 7 6 4 4 5 3 7 2 3 7 3 7 4 4 8]
+  let xind length(xstor) - 1
+  let yind length(ystor) - 1
+  repeat length(xstor)[
+    (ask patch (item xind xstor) (item yind ystor)[born])
+    set xind xind - 1
+    set yind yind - 1
+  ]
+end
+
 @#$#@#$#@
 GRAPHICS-WINDOW
-222
-10
-746
-535
+285
+52
+809
+577
 -1
 -1
 4.0
@@ -153,46 +208,182 @@ percent-alive
 percent-alive
 0
 100
-37.0
+16.0
 1
 1
 NIL
 HORIZONTAL
 
 CHOOSER
-889
-90
-1027
-135
+1716
+48
+1854
+93
 conorrug
 conorrug
 "con" "rug"
 0
 
 CHOOSER
-895
-165
-1033
-210
+1700
+131
+1838
+176
 funmode
 funmode
 "on" "off"
-0
+1
 
 SLIDER
-895
-265
-1067
-298
+1642
+290
+1814
+323
 funmodeinterval
 funmodeinterval
 0
 5
-0.5
+3.1
 .1
 1
 NIL
 HORIZONTAL
+
+BUTTON
+1041
+609
+1236
+642
+savedrawing1
+\n  set xstor []\n  set ystor []\n  ask patches with[ali? = true][(set xstor (insert-item 0 xstor pxcor)) (set ystor (insert-item 0 ystor pycor))] ; set paint to draw to store mode and run this to get lists of the x and the y cors for whatever you drew \n  set xmem1 xstor\n  set ymem1 ystor\n
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1317
+631
+1443
+664
+savemem2
+\n  set xstor []\n  set ystor []\n  ask patches with[ali? = true][(set xstor (insert-item 0 xstor pxcor)) (set ystor (insert-item 0 ystor pycor))] ; set paint to draw to store mode and run this to get lists of the x and the y cors for whatever you drew \n  set xmem2 xstor\n  set ymem2 ystor\n
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1547
+636
+1710
+669
+savemem3
+\n  set xstor []\n  set ystor []\n  ask patches with[ali? = true][(set xstor (insert-item 0 xstor pxcor)) (set ystor (insert-item 0 ystor pycor))] ; set paint to draw to store mode and run this to get lists of the x and the y cors for whatever you drew \n  set xmem3 xstor\n  set ymem3 ystor\n
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1336
+387
+1475
+420
+clear screen
+ask patches[death]
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1057
+668
+1252
+701
+drawing1
+  let xind length(xmem1) - 1\n  let yind length(ymem1) - 1\n  repeat length(xmem1)[\n    (ask patch (item xind xmem1) (item yind ymem1)[born])\n    set xind xind - 1\n    set yind yind - 1\n  ]
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1116
+567
+1286
+600
+clear screen and memory
+ca
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1348
+687
+1543
+720
+drawmem2
+  let xind length(xmem2) - 1\n  let yind length(ymem2) - 1\n  repeat length(xmem2)[\n    (ask patch (item xind xmem2) (item yind ymem2)[born])\n    set xind xind - 1\n    set yind yind - 1\n  ]
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+BUTTON
+1578
+693
+1773
+726
+drawmem3
+  let xind length(xmem3) - 1\n  let yind length(ymem3) - 1\n  repeat length(xmem3)[\n    (ask patch (item xind xmem3) (item yind ymem3)[born])\n    set xind xind - 1\n    set yind yind - 1\n  ]
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
