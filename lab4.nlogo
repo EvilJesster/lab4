@@ -13,9 +13,8 @@ to setup
     ask patches[death]
     ask patches with[pxcor < 2 AND pxcor > -1 AND pycor > -1 AND pycor < 2][born]
   ]
-
-
 end
+
 
 to born
   set ali? true
@@ -26,6 +25,8 @@ to death
   set ali? false
   set pcolor black
 end
+
+
 
 to deathorlife
   every .1 [
@@ -60,6 +61,8 @@ to deathorlife
      ]
   ]]
 end
+
+
 
 to paint
   if mouse-down? and mouse-inside?
@@ -119,7 +122,6 @@ to gospergun ; not yet working :(
     set yind yind - 1
   ]
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 285
@@ -208,7 +210,7 @@ percent-alive
 percent-alive
 0
 100
-16.0
+71.0
 1
 1
 NIL
@@ -232,7 +234,7 @@ CHOOSER
 funmode
 funmode
 "on" "off"
-1
+0
 
 SLIDER
 1642
@@ -243,7 +245,7 @@ funmodeinterval
 funmodeinterval
 0
 5
-3.1
+3.8
 .1
 1
 NIL
